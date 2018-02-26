@@ -151,6 +151,7 @@
       <Type Name="BindableProperty+ValidateValueDelegate`1" DisplayName="BindableProperty+ValidateValueDelegate&lt;TPropertyType&gt;" Kind="Delegate" />
       <Type Name="BindablePropertyConverter" Kind="Class" />
       <Type Name="BindablePropertyKey" Kind="Class" />
+      <Type Name="BindableValueChangedEventArgs" Kind="Class" />
       <Type Name="Binding" Kind="Class" />
       <Type Name="BindingBase" Kind="Class" />
       <Type Name="BindingCondition" Kind="Class" />
@@ -252,6 +253,7 @@
       <Type Name="IApplicationController" Kind="Interface" />
       <Type Name="IAppLinkEntry" Kind="Interface" />
       <Type Name="IAppLinks" Kind="Interface" />
+      <Type Name="IBorderController" Kind="Interface" />
       <Type Name="IButtonController" Kind="Interface" />
       <Type Name="ICellController" Kind="Interface" />
       <Type Name="IConfigElement`1" DisplayName="IConfigElement&lt;T&gt;" Kind="Interface" />
@@ -274,6 +276,7 @@
       <Type Name="IListProxy" Kind="Interface" />
       <Type Name="IListViewController" Kind="Interface" />
       <Type Name="Image" Kind="Class" />
+      <Type Name="ImageButton" Kind="Class" />
       <Type Name="ImageCell" Kind="Class" />
       <Type Name="ImageSource" Kind="Class" />
       <Type Name="ImageSourceConverter" Kind="Class" />

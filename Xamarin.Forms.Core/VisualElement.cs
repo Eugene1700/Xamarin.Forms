@@ -782,6 +782,27 @@ namespace Xamarin.Forms
 			if (focus != null)
 				focus(this, new FocusEventArgs(this, true));
 		}
+		 
+		internal void ChangeVisualStateInternal()
+		{
+			ChangeVisualState();
+		}
+
+		protected virtual void ChangeVisualState()
+		{
+			if(!IsEnabled)
+			{
+				VisualStateManager.GoToState(this, VisualStateManager.CommonStates.Disabled);
+			}
+			else if (IsFocused)
+			{
+				VisualStateManager.GoToState(this, VisualStateManager.CommonStates.Focused);
+			}
+			else
+			{
+				VisualStateManager.GoToState(this, VisualStateManager.CommonStates.Normal);
+			}
+		}
 
 		static void FlowDirectionChanged(BindableObject bindable, object oldValue, object newValue)
 		{
@@ -807,10 +828,7 @@ namespace Xamarin.Forms
 			}
 
 			var isEnabled = (bool)newValue;
-
-			VisualStateManager.GoToState(element, isEnabled 
-				? VisualStateManager.CommonStates.Normal 
-				: VisualStateManager.CommonStates.Disabled);
+			element.ChangeVisualState();
 		}
 
 		static void OnIsFocusedPropertyChanged(BindableObject bindable, object oldvalue, object newvalue)
@@ -832,9 +850,7 @@ namespace Xamarin.Forms
 				element.OnUnfocus();
 			}
 
-			VisualStateManager.GoToState(element, isFocused
-				? VisualStateManager.CommonStates.Normal
-				: VisualStateManager.CommonStates.Focused);
+			element.ChangeVisualState();
 		}
 
 		static void OnRequestChanged(BindableObject bindable, object oldvalue, object newvalue)

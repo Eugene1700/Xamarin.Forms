@@ -438,7 +438,7 @@ class MyBindable : BindableObject
     </Member>
     <Member MemberName="IsSet">
       <MemberSignature Language="C#" Value="public bool IsSet (Xamarin.Forms.BindableProperty targetProperty);" />
-      <MemberSignature Language="ILAsm" Value=".method public hidebysig instance bool IsSet(class Xamarin.Forms.BindableProperty targetProperty) cil managed" />
+      <MemberSignature Language="ILAsm" Value=".method public hidebysig newslot virtual instance bool IsSet(class Xamarin.Forms.BindableProperty targetProperty) cil managed" />
       <MemberType>Method</MemberType>
       <AssemblyInfo>
         <AssemblyVersion>2.0.0.0</AssemblyVersion>

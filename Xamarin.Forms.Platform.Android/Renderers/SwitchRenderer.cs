@@ -73,7 +73,9 @@ namespace Xamarin.Forms.Platform.Android
 					SetNativeControl(aswitch);
 				}
 				else
+				{
 					UpdateEnabled(); // Normally set by SetNativeControl, but not when the Control is reused.
+				}
 
 				e.NewElement.Toggled += HandleToggled;
 				Control.Checked = e.NewElement.IsToggled;

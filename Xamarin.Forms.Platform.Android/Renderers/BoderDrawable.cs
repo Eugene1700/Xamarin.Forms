@@ -5,7 +5,7 @@ using Android.Graphics.Drawables;
 
 namespace Xamarin.Forms.Platform.Android
 {
-	internal class ButtonDrawable : Drawable
+	internal class BorderDrawable : Drawable
 	{
 		public const int DefaultCornerRadius = 2; // Default value for Android material button.
 		const int ShadowDy = 4;
@@ -23,16 +23,20 @@ namespace Xamarin.Forms.Platform.Android
 		{
 			get { return (_paddingTop / 2f) + ShadowDy; }
 			set { _paddingTop = value; }
-		} 
+		}
 
-		public ButtonDrawable(Func<double, float> convertToPixels, Color defaultColor)
+		public BorderDrawable(Func<double, float> convertToPixels, Color defaultColor)
 		{
 			_convertToPixels = convertToPixels;
 			_pressed = false;
 			_defaultColor = defaultColor;
 		}
 
-		public Button Button { get; set; }
+		public IBorderController Button
+		{
+			get;
+			set;
+		}
 
 		public override bool IsStateful
 		{

@@ -104,12 +104,14 @@
     <Compile Include="AndroidApplicationLifecycleState.cs" />
     <Compile Include="AndroidTitleBarVisibility.cs" />
     <Compile Include="AppCompat\FrameRenderer.cs" />
-    <Compile Include="ButtonBackgroundTracker.cs" />
+    <Compile Include="BackgroundManager.cs" />
+    <Compile Include="BorderBackgroundTracker.cs" />
     <Compile Include="Elevation.cs" />
     <Compile Include="Extensions\EntryRendererExtensions.cs" />
     <Compile Include="FastRenderers\AutomationPropertiesProvider.cs" />
     <Compile Include="AppCompat\PageExtensions.cs" />
     <Compile Include="Extensions\JavaObjectExtensions.cs" />
+    <Compile Include="FastRenderers\ButtonElementManager.cs" />
     <Compile Include="FastRenderers\ButtonRenderer.cs" />
     <Compile Include="AppCompat\FormsViewPager.cs" />
     <Compile Include="AppCompat\FragmentContainer.cs" />
@@ -131,6 +133,8 @@
     <Compile Include="ExportImageSourceHandlerAttribute.cs" />
     <Compile Include="ExportRendererAttribute.cs" />
     <Compile Include="Extensions\FlowDirectionExtensions.cs" />
+    <Compile Include="FastRenderers\ImageButtonRenderer.cs" />
+    <Compile Include="FastRenderers\ImageElementManager.cs" />
     <Compile Include="GestureManager.cs" />
     <Compile Include="FastRenderers\LabelRenderer.cs" />
     <Compile Include="FastRenderers\VisualElementRenderer.cs" />
@@ -169,8 +173,9 @@
     <Compile Include="PlatformEffect.cs" />
     <Compile Include="LayoutExtensions.cs" />
     <Compile Include="Renderers\AHorizontalScrollView.cs" />
-    <Compile Include="Renderers\ButtonDrawable.cs" />
     <Compile Include="Renderers\AlignmentExtensions.cs" />
+    <Compile Include="Renderers\BoderDrawable.cs" />
+    <Compile Include="Renderers\ButtonRenderer.cs" />
     <Compile Include="Renderers\ConditionalFocusLayout.cs" />
     <Compile Include="Renderers\DescendantFocusToggler.cs" />
     <Compile Include="Renderers\FormsEditText.cs" />
@@ -215,7 +220,6 @@
     <Compile Include="Renderers\ActionSheetRenderer.cs" />
     <Compile Include="Renderers\ActivityIndicatorRenderer.cs" />
     <Compile Include="Renderers\BoxRenderer.cs" />
-    <Compile Include="Renderers\ButtonRenderer.cs" />
     <Compile Include="Renderers\CarouselPageRenderer.cs" />
     <Compile Include="Renderers\DatePickerRenderer.cs" />
     <Compile Include="Renderers\EditorRenderer.cs" />

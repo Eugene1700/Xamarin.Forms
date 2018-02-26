@@ -309,6 +309,22 @@
         <altmember cref="P:Xamarin.Forms.VisualElement.HeightRequest" />
       </Docs>
     </Member>
+    <Member MemberName="ChangeVisualState">
+      <MemberSignature Language="C#" Value="protected virtual void ChangeVisualState ();" />
+      <MemberSignature Language="ILAsm" Value=".method familyhidebysig newslot virtual instance void ChangeVisualState() cil managed" />
+      <MemberType>Method</MemberType>
+      <AssemblyInfo>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+      </AssemblyInfo>
+      <ReturnValue>
+        <ReturnType>System.Void</ReturnType>
+      </ReturnValue>
+      <Parameters />
+      <Docs>
+        <summary>To be added.</summary>
+        <remarks>To be added.</remarks>
+      </Docs>
+    </Member>
     <Member MemberName="ChildrenReordered">
       <MemberSignature Language="C#" Value="public event EventHandler ChildrenReordered;" />
       <MemberSignature Language="ILAsm" Value=".event class System.EventHandler ChildrenReordered" />

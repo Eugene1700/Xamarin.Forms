@@ -9,7 +9,7 @@ using Windows.UI.Xaml.Media;
 
 namespace Xamarin.Forms.Platform.UWP
 {
-	public class VisualElementRenderer<TElement, TNativeElement> : Panel, IVisualElementRenderer, IDisposable, IEffectControlProvider where TElement : VisualElement
+	public class VisualElementRenderer<TElement, TNativeElement> : Panel, IVisualNativeElementRenderer, IDisposable, IEffectControlProvider where TElement : VisualElement
 																																	  where TNativeElement : FrameworkElement
 	{
 		string _defaultAutomationPropertiesName;
@@ -18,6 +18,9 @@ namespace Xamarin.Forms.Platform.UWP
 		UIElement _defaultAutomationPropertiesLabeledBy;
 		bool _disposed;
 		EventHandler<VisualElementChangedEventArgs> _elementChangedHandlers;
+		event EventHandler<PropertyChangedEventArgs> _elementPropertyChanged;
+		event EventHandler _controlChanging;
+		event EventHandler _controlChanged;
 		VisualElementTracker<TElement, TNativeElement> _tracker;
 		Windows.UI.Xaml.Controls.Page _containingPage; // Cache of containing page used for unfocusing
 
@@ -133,7 +136,7 @@ namespace Xamarin.Forms.Platform.UWP
 
 				if (AutoTrack && Tracker == null)
 				{
-					Tracker = new VisualElementTracker<TElement, TNativeElement>();	
+					Tracker = new VisualElementTracker<TElement, TNativeElement>();
 				}
 
 				// Disabled until reason for crashes with unhandled exceptions is discovered
@@ -158,9 +161,25 @@ namespace Xamarin.Forms.Platform.UWP
 				controller.EffectControlProvider = this;
 		}
 
-		
+
 
 		public event EventHandler<ElementChangedEventArgs<TElement>> ElementChanged;
+		event EventHandler<PropertyChangedEventArgs> IVisualNativeElementRenderer.ElementPropertyChanged
+		{
+			add => _elementPropertyChanged += value;
+			remove => _elementPropertyChanged -= value;
+		}
+
+		event EventHandler IVisualNativeElementRenderer.ControlChanging
+		{
+			add { _controlChanging += value; }
+			remove { _controlChanging -= value; }
+		}
+		event EventHandler IVisualNativeElementRenderer.ControlChanged
+		{
+			add { _controlChanged += value; }
+			remove { _controlChanged -= value; }
+		}
 
 		protected override Windows.Foundation.Size ArrangeOverride(Windows.Foundation.Size finalSize)
 		{
@@ -309,9 +328,12 @@ namespace Xamarin.Forms.Platform.UWP
 				SetAutomationPropertiesAccessibilityView();
 			else if (e.PropertyName == AutomationProperties.LabeledByProperty.PropertyName)
 				SetAutomationPropertiesLabeledBy();
-			else if (e.PropertyName == VisualElement.InputTransparentProperty.PropertyName || 
+			else if (e.PropertyName == VisualElement.InputTransparentProperty.PropertyName ||
 					e.PropertyName == Layout.CascadeInputTransparentProperty.PropertyName)
 				UpdateInputTransparent();
+
+
+			_elementPropertyChanged?.Invoke(this, e);
 		}
 
 		protected virtual void OnRegisterEffect(PlatformEffect effect)
@@ -396,6 +418,7 @@ namespace Xamarin.Forms.Platform.UWP
 
 		protected void SetNativeControl(TNativeElement control)
 		{
+			_controlChanging?.Invoke(this, EventArgs.Empty);
 			TNativeElement oldControl = Control;
 			Control = control;
 
@@ -411,7 +434,10 @@ namespace Xamarin.Forms.Platform.UWP
 			UpdateTracker();
 
 			if (control == null)
+			{
+				_controlChanged?.Invoke(this, EventArgs.Empty);
 				return;
+			}
 
 			Control.HorizontalAlignment = HorizontalAlignment.Stretch;
 			Control.VerticalAlignment = VerticalAlignment.Stretch;
@@ -431,6 +457,8 @@ namespace Xamarin.Forms.Platform.UWP
 
 			if (Element != null && !string.IsNullOrEmpty(Element.AutomationId))
 				SetAutomationId(Element.AutomationId);
+
+			_controlChanged?.Invoke(this, EventArgs.Empty);
 		}
 
 		protected virtual void UpdateBackgroundColor()

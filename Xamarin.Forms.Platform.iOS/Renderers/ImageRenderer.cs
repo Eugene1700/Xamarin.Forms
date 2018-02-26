@@ -27,7 +27,7 @@ namespace Xamarin.Forms.Platform.iOS
 		}
 	}
 
-	public class ImageRenderer : ViewRenderer<Image, UIImageView>
+	public class ImageRenderer : ViewRenderer<Image, UIImageView>, IImageVisualElementRenderer
 	{
 		bool _isDisposed;
 
@@ -48,47 +48,6 @@ namespace Xamarin.Forms.Platform.iOS
 			_isDisposed = true;
 
 			base.Dispose(disposing);
-		}
-
-		protected override async void OnElementChanged(ElementChangedEventArgs<Image> e)
-		{
-			if (Control == null)
-			{
-				var imageView = new UIImageView(RectangleF.Empty);
-				imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
-				imageView.ClipsToBounds = true;
-				SetNativeControl(imageView);
-			}
-
-			if (e.NewElement != null)
-			{
-				SetAspect();
-				await TrySetImage(e.OldElement);
-				SetOpacity();
-			}
-
-			base.OnElementChanged(e);
-		}
-
-		protected override async void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
-		{
-			base.OnElementPropertyChanged(sender, e);
-			if (e.PropertyName == Image.SourceProperty.PropertyName)
-				await TrySetImage();
-			else if (e.PropertyName == Image.IsOpaqueProperty.PropertyName)
-				SetOpacity();
-			else if (e.PropertyName == Image.AspectProperty.PropertyName)
-				SetAspect();
-		}
-
-		void SetAspect()
-		{
-			if (_isDisposed || Element == null || Control == null)
-			{
-				return;
-			}
-
-			Control.ContentMode = Element.Aspect.ToUIViewContentMode();
 		}
 
 		protected virtual async Task TrySetImage(Image previous = null)
@@ -113,69 +72,41 @@ namespace Xamarin.Forms.Platform.iOS
 
 		protected async Task SetImage(Image oldElement = null)
 		{
-			if (_isDisposed || Element == null || Control == null)
-			{
-				return;
-			}
-
-			var source = Element.Source;
-
-			if (oldElement != null)
-			{
-				var oldSource = oldElement.Source;
-				if (Equals(oldSource, source))
-					return;
-
-				if (oldSource is FileImageSource && source is FileImageSource && ((FileImageSource)oldSource).File == ((FileImageSource)source).File)
-					return;
-
-				Control.Image = null;
-			}
-
-			IImageSourceHandler handler;
-
-			Element.SetIsLoading(true);
-
-			if (source != null &&
-			    (handler = Internals.Registrar.Registered.GetHandlerForObject<IImageSourceHandler>(source)) != null)
-			{
-				UIImage uiimage;
-				try
-				{
-					uiimage = await handler.LoadImageAsync(source, scale: (float)UIScreen.MainScreen.Scale);
-				}
-				catch (OperationCanceledException)
-				{
-					uiimage = null;
-				}
-
-				if (_isDisposed)
-					return;
-
-				var imageView = Control;
-				if (imageView != null)
-					imageView.Image = uiimage;
-
-				((IVisualElementController)Element).NativeSizeChanged();
-			}
-			else
-			{
-				Control.Image = null;
-			}
-
-			Element.SetIsLoading(false);
+			await ImageElementManager.SetImage(this, Element, oldElement);
 		}
 
-		void SetOpacity()
+		protected override async void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (_isDisposed || Element == null || Control == null)
+			base.OnElementPropertyChanged(sender, e);
+
+			if (e.PropertyName == Image.SourceProperty.PropertyName)
+				await TrySetImage();
+		}
+
+		protected override async void OnElementChanged(ElementChangedEventArgs<Image> e)
+		{
+			if (Control == null)
 			{
-				return;
+				var imageView = new UIImageView(RectangleF.Empty);
+				imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
+				imageView.ClipsToBounds = true;
+				SetNativeControl(imageView);
 			}
 
-			Control.Opaque = Element.IsOpaque;
+			if (e.NewElement != null)
+			{
+				await TrySetImage(e.OldElement as Image);
+			}
+
+			base.OnElementChanged(e);
 		}
+
+		void IImageVisualElementRenderer.SetImage(UIImage image) =>
+			Control.Image = image;
+
+		bool IImageVisualElementRenderer.IsDisposed => _isDisposed;
 	}
+
 
 	public interface IImageSourceHandler : IRegisterable
 	{
