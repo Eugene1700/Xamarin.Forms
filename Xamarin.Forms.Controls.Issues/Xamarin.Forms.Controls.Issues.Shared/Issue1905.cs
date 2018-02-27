@@ -51,18 +51,28 @@ namespace Xamarin.Forms.Controls.Issues
 		protected override void Init()
 		{
 			On<iOS>().SetPrefersLargeTitles(true);
-		
+			var items = new List<string>();
+			for (int i = 0; i < 1000; i++)
+			{
+				items.Add($"pull to {DateTime.Now.Ticks}");
+			}
 			var page = new ContentPage
 			{
 				Title = "Pull Large Titles"
 			};
+
 			var lst = new ListView();
-			lst.ItemsSource = new string[] { "pull to", "refresh" };
 			lst.IsPullToRefreshEnabled = true;
+			lst.ItemsSource = items;
 			lst.RefreshCommand = new Command(async () =>
 			{
+				var newitems = new List<string>();
 				await Task.Delay(5000);
-				lst.ItemsSource = new string[] { $"data {DateTime.Now.Second}", "refreshed" };
+				for (int i = 0; i < 1000; i++)
+				{
+					newitems.Add($"data {DateTime.Now.Ticks} refreshed");
+				}
+				lst.ItemsSource = newitems;
 				lst.EndRefresh();
 			});
 			page.Content = lst;

@@ -1283,7 +1283,7 @@ namespace Xamarin.Forms.Platform.iOS
 			{
 				if (_refresh == null)
 					return;
-
+				_refresh.EndRefreshing();
 				UpdateContentOffset(-1, _refresh.EndRefreshing);
 
 				if (!_list.IsPullToRefreshEnabled)
@@ -1299,6 +1299,12 @@ namespace Xamarin.Forms.Platform.iOS
 				{
 					_refreshAdded = true;
 					RefreshControl = _refresh;
+					//hack: ahahah take that UIKit! i really need to subclass and handle this on a custom UIRefreshControl
+					Device.StartTimer(TimeSpan.FromMilliseconds(100), () => {
+						if(_refresh != null && _refresh.Refreshing)
+							_refresh.Hidden = false;
+						return true;
+					});
 				}
 			}
 			// https://bugzilla.xamarin.com/show_bug.cgi?id=52962
