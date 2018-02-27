@@ -90,7 +90,7 @@ namespace Xamarin.Forms.Controls.Issues
 		[Test]
 		public void TestIssue1905RefreshShows()
 		{
-			Running.Screenshot("Should show refresh control");
+			RunningApp.Screenshot("Should show refresh control");
 		}
 #endif
 	}
