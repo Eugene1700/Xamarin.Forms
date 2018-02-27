@@ -1283,7 +1283,7 @@ namespace Xamarin.Forms.Platform.iOS
 			{
 				if (_refresh == null)
 					return;
-				
+
 				UpdateContentOffset(-1, _refresh.EndRefreshing);
 
 				if (!_list.IsPullToRefreshEnabled)

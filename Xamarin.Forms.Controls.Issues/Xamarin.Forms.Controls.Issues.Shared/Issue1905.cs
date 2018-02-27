@@ -8,7 +8,13 @@ using Xamarin.Forms.Internals;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 
-namespace Xamarin.Forms.Controls.TestCasesPages
+#if UITEST
+using NUnit.Framework;
+using Xamarin.UITest;
+
+#endif
+
+namespace Xamarin.Forms.Controls.Issues
 {
 
 	[Preserve(AllMembers = true)]
@@ -65,9 +71,17 @@ namespace Xamarin.Forms.Controls.TestCasesPages
 				await Task.Delay(500);
 				lst.BeginRefresh();
 			};
-			page.ToolbarItems.Add(new ToolbarItem { Text = "Refresh", Command = new Command((obj) => lst.BeginRefresh()) });
+			page.ToolbarItems.Add(new ToolbarItem { Text = "Refresh", Command = new Command((obj) => lst.BeginRefresh()), AutomationId = "btnRefresh" });
 			Navigation.PushAsync(page);
 
 		}
+
+#if UITEST
+		[Test]
+		public void TestIssue1905RefreshShows()
+		{
+			Running.Screenshot("Should show refresh control");
+		}
+#endif
 	}
 }
